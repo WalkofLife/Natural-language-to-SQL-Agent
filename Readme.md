@@ -158,33 +158,7 @@ verify safety and schema relevance
 generate SQL
 validate SQL
 execute the query and print results
-If you want, I can also turn this into a ready-to-save file content block with no extra commentary.
 
-Checking the actual folder contents for `NL2SQL MLFlow` and then I’ll return the full tree structure.
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/data)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/data/vector_store)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-51c1798cfe5d48a0a2dcfb00703a780d)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-55835618575948e38c8266556f982cb7)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-51c1798cfe5d48a0a2dcfb00703a780d/artifacts)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-51c1798cfe5d48a0a2dcfb00703a780d/artifacts/code)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-55835618575948e38c8266556f982cb7/artifacts)
-
-Read [](file:///c%3A/Users/anirudh.sharma/OneDrive%20-%20Nihilent%20Limited/Learning/Chatbot/NL2SQL%20MLFlow/mlartifacts/1/models/m-55835618575948e38c8266556f982cb7/artifacts/code)
 
 ## Folder tree for `NL2SQL MLFlow`
 
