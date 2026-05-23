@@ -263,3 +263,73 @@ NL2SQL MLFlow/
 +-- vector_store.py
 +-- workflow.py
 ```
+
+### Request Tracing
+
+The API supports request correlation using `X-Request-ID`.
+
+Behavior:
+
+- If `X-Request-ID` is provided by the client, it is preserved.
+- If not provided, the API generates:
+
+req_<uuid>
+
+The request ID is:
+
+- available during request execution
+- propagated into the service layer
+- returned in response headers
+
+Example:
+
+Request:
+
+curl -X POST http://127.0.0.1:8000/query \
+-H "Content-Type: application/json" \
+-H "X-Request-ID: frontend_001" \
+-d '{"question":"Show all customers"}'
+
+Response:
+
+HTTP/1.1 200 OK
+
+X-Request-ID: frontend_001
+
+### Observability
+
+Current observability capabilities:
+
+- Request ID correlation
+- API latency tracking
+- Structured application logging
+- MLflow metrics tracking
+
+Request flow:
+
+Client
+→ FastAPI
+→ Service Layer
+→ MLflow Model
+→ LangGraph Workflow
+→ SQL Execution
+→ Response
+
+Observability scope intentionally excludes:
+
+- OpenTelemetry
+- Distributed tracing
+- Grafana
+- Prometheus
+- LangSmith
+
+### Recent Improvements
+
+Request tracing middleware added.
+
+Features:
+
+- Automatic request ID generation
+- Support for upstream request IDs
+- Response header propagation
+- Service-level request correlation
