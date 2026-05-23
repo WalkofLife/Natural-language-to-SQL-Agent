@@ -58,9 +58,9 @@ class NL2SQLService:
         
         self.logger.info("NL2SQL API ready")
     
-    def execute(self, question: str):
+    def execute(self, question: str, request_id: str = None):
         start = time.perf_counter()
-        
+        self.logger.info("Request ID %s", request_id)
         conn = setup_database(self.logger)
         cursor = conn.cursor()
         
@@ -93,6 +93,7 @@ class NL2SQLService:
         try:
             with mlflow.start_run(nested = True):
                 mlflow.log_metric("api_latency_ms", latency_ms)
+                mlflow.log_param("request_id", request_id)
        
         except Exception as e:
             self.logger.warning("MLFlow metric logging failed: %s", str(e))
