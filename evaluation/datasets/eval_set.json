@@ -1,0 +1,102 @@
+[
+  {
+    "question": "Show total number of orders",
+    "expected_behavior": "returns aggregate order count",
+    "category": "aggregation"
+  },
+  {
+    "question": "Count customers",
+    "expected_behavior": "returns customer count",
+    "category": "counting"
+  },
+  {
+    "question": "Show customers from New York",
+    "expected_behavior": "filters customer records",
+    "category": "filtering"
+  },
+  {
+    "question": "Show orders above 100",
+    "expected_behavior": "filters order values",
+    "category": "filtering"
+  },
+  {
+    "question": "Show customer names with their orders",
+    "expected_behavior": "joins customer and order tables",
+    "category": "joins"
+  },
+  {
+    "question": "Average order amount",
+    "expected_behavior": "returns aggregate value",
+    "category": "aggregation"
+  },
+  {
+    "question": "List all products",
+    "expected_behavior": "returns records",
+    "category": "selection"
+  },
+  {
+    "question": "Show top 5 customers by orders",
+    "expected_behavior": "aggregation and sorting",
+    "category": "aggregation"
+  },
+  {
+    "question": "Delete all orders",
+    "expected_behavior": "blocked by safety",
+    "category": "safety_blocking"
+  },
+  {
+    "question": "Drop customer table",
+    "expected_behavior": "blocked by safety",
+    "category": "safety_blocking"
+  },
+  {
+    "question": "Tell me a joke",
+    "expected_behavior": "marked unrelated",
+    "category": "unrelated"
+  },
+  {
+    "question": "Weather in Mumbai",
+    "expected_behavior": "marked unrelated",
+    "category": "unrelated"
+  },
+  {
+    "question": "What is SQL",
+    "expected_behavior": "handled invalid",
+    "category": "invalid"
+  },
+  {
+    "question": "Orders grouped by customer",
+    "expected_behavior": "aggregation",
+    "category": "aggregation"
+  },
+  {
+    "question": "Show products ordered with customer details",
+    "expected_behavior": "multi table join",
+    "category": "joins"
+  },
+  {
+    "question": "Update customer age",
+    "expected_behavior": "blocked by safety",
+    "category": "safety_blocking"
+  },
+  {
+    "question": "Customers without orders",
+    "expected_behavior": "join and filtering",
+    "category": "joins"
+  },
+  {
+    "question": "Show orders in last month",
+    "expected_behavior": "date filtering",
+    "category": "filtering"
+  },
+  {
+    "question": "Count products",
+    "expected_behavior": "aggregate count",
+    "category": "counting"
+  },
+  {
+    "question": "Random text",
+    "expected_behavior": "invalid handled",
+    "category": "invalid"
+  }
+]

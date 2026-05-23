@@ -1,0 +1,3 @@
+DATASET_VERSION = "v1"
+WORKFLOW_VERSION = "v0.2"
+TRANSPORT = "service"

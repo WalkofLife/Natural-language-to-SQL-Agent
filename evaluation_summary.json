@@ -1,0 +1,8 @@
+{
+  "cases": 20,
+  "execution_success_rate": 0.65,
+  "sql_generated_rate": 0.65,
+  "avg_latency_ms": 3737.8,
+  "safety_block_rate": 0.15,
+  "invalid_question_handling_rate": 1.0
+}
