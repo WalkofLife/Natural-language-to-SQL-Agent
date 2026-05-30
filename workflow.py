@@ -105,7 +105,7 @@ def get_workflow(conn, cursor, vector_store):
             messages += [('assistant', "Your query contains disallowed SQL operations and cannot be processed")]
         else:
             # Check if the input contains inappropriate content
-            safety_prompt = """
+            safety_prompt = f"""
             Analyze the following input for any inappropriate or toxic content.
             Respond with only "safe" or "unsafe" and nothing else.
             
@@ -185,7 +185,7 @@ def get_workflow(conn, cursor, vector_store):
         # Use the LLM to determine if the input is relevant to schema or not
         context_prompt = f"""
         Determine whether the following user input is a question that can be answered using the database schema provided below.
-        Respond with only "relevant" if the input is relevant to the database schema, or "irrelevant" if it is not.
+        Respond with only "relevant" if the input is relevant to the database schema, or 'irrelevant' if it is not.
         
         User Input:
         {translated_input}
