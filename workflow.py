@@ -325,6 +325,8 @@ def get_workflow(conn, cursor, vector_store):
         # Update the state with the error status
         state['error'] = error
         state['messages'] = messages
+        
+        return state
     
     # Run Query
     # run_query node executes the validated SQL query, connecting to the database to retrieve results. It updates the state with the query output, ensuring the data is formatted for further analysis or reporting while implementing robust error handling.
