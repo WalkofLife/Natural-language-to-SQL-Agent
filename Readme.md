@@ -262,12 +262,6 @@ NL2SQL MLFlow/
 +-- test.ipynb
 +-- vector_store.py
 +-- workflow.py
-evaluation/
-├── evaluator.py
-├── metrics.py
-├── config.py
-└── datasets/
-    └── eval_set.json
 ```
 
 ### Request Tracing
@@ -329,113 +323,13 @@ Observability scope intentionally excludes:
 - Prometheus
 - LangSmith
 
-## Evaluation Framework
+### Recent Improvements
 
-The project includes a lightweight evaluation layer to measure end-to-end NL2SQL system behavior across runs.
+Request tracing middleware added.
 
-Evaluation is intentionally focused on system reliability and regression tracking rather than SQL correctness scoring.
+Features:
 
-Purpose:
-
-- Measure SQL generation performance
-- Detect regressions after workflow changes
-- Compare evaluation runs over time
-- Generate reproducible evidence for model and workflow improvements
-
-Questions this evaluation helps answer:
-
-- Did system quality improve after changes?
-- Did a refactor break SQL generation?
-- Is latency getting worse?
-- Are safety checks still working?
-- Can we compare workflow versions?
-
-Evaluation Architecture:
-
-Evaluation Runner
-→ NL2SQL Service
-→ MLflow Model
-→ LangGraph
-→ SQL Validation
-→ SQLite
-→ Metrics
-→ MLflow Tracking
-
-Evaluation Components:
-
-evaluation/
-├── evaluator.py
-├── metrics.py
-├── config.py
-└── datasets/
-    └── eval_set.json
-
-Current Metrics:
-
-- sql_generated_rate
-- execution_success_rate
-- avg_latency_ms
-- safety_block_rate
-- invalid_question_handling_rate
-
-Dataset Design:
-
-Evaluation cases are manually curated and reproducible.
-
-Coverage includes:
-
-- Aggregation
-- Filtering
-- Joins
-- Counting
-- Invalid Questions
-- Unrelated Questions
-- Safety Blocking
-
-The framework intentionally does NOT include:
-
-- Prompt optimization
-- SQL correctness judging
-- Semantic similarity
-- Judge models
-- Human feedback
-- Synthetic benchmarks
-
-MLflow Evaluation Tracking:
-
-Each evaluation run logs:
-
-Parameters:
-
-- dataset_version
-- workflow_version
-- transport
-
-Metrics:
-
-- execution_success_rate
-- sql_generated_rate
-- avg_latency_ms
-- safety_block_rate
-- invalid_question_handling_rate
-
-Artifacts:
-
-- evaluation_summary.json
-
-Run Evaluation:
-
-```bash
-python evaluate.py
-```
-
-
-Example Summary:
-
-```json
-{
-  "cases": 20,
-  "execution_success_rate": 0.85,
-  "avg_latency_ms": 212
-}
-```
+- Automatic request ID generation
+- Support for upstream request IDs
+- Response header propagation
+- Service-level request correlation
