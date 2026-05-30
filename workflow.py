@@ -10,20 +10,10 @@ from pydantic import Field
 
 # Initalize the logger
 _logger = logging.getLogger(__name__)
-# _logger.setLevel(logging.INFO)
-
-# if not _logger.handlers:
-#     handler = logging.StreamHandler()
-
-#     formatter = logging.Formatter(
-#         "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-#     handler.setFormatter(formatter)
-#     _logger.addHandler(handler)
-    
 
 
 class GraphState(TypedDict):
-    error: str # Tracks if an error has occured
+    error: bool # Tracks if an error has occured
     messages: List # List of messages(user input and assistant messages)
     generation: Optional[str] # Holds the generated SQL query
     iterations: int # Keeps track of how many times the workflow has retried
@@ -92,7 +82,7 @@ def get_workflow(conn, cursor, vector_store):
         _logger.info("Performing Safety checks")
         translated_input = state['translated_input']
         messages = state['messages']
-        error = "no"
+        error = False
         
         # List of disallowed SQL operations 
         disallowed_operations = ['CREATE', 'DELETE', "DROP", 'ALTER', "INSERT", 'UPDATE', 'TRUNCATE', 'EXEC', 'EXECUTE']
@@ -101,11 +91,11 @@ def get_workflow(conn, cursor, vector_store):
         # Check if the input contains disallowed SQL operations
         if pattern.search(translated_input):
             _logger.warning("Input contains disallowed SQL operations. Halting the workflow")
-            error = "yes"
+            error = True
             messages += [('assistant', "Your query contains disallowed SQL operations and cannot be processed")]
         else:
             # Check if the input contains inappropriate content
-            safety_prompt = """
+            safety_prompt = f"""
             Analyze the following input for any inappropriate or toxic content.
             Respond with only "safe" or "unsafe" and nothing else.
             
@@ -119,7 +109,7 @@ def get_workflow(conn, cursor, vector_store):
                 _logger.info("Input passed the pre safety check")
             else:
                 _logger.warning("Input failed the pre safety check. Halting workflow")
-                error = "yes"
+                error = True
                 messages+= [('assistant', "Your query contains inappropriate content and can not be processed")]
         
         state['error'] = error
@@ -178,14 +168,14 @@ def get_workflow(conn, cursor, vector_store):
         
         # Extract relevant data from the state
         translated_input = state['translated_input']
-        error = "no"
+        error = False
         messages = state['messages']
         database_schema = state['database_schema'] # Get the schema from the state
         
         # Use the LLM to determine if the input is relevant to schema or not
         context_prompt = f"""
         Determine whether the following user input is a question that can be answered using the database schema provided below.
-        Respond with only "relevant" if the input is relevant to the database schema, or "irrelevant" if it is not.
+        Respond with only "relevant" if the input is relevant to the database schema, or 'irrelevant' if it is not.
         
         User Input:
         {translated_input}
@@ -201,7 +191,7 @@ def get_workflow(conn, cursor, vector_store):
             _logger.info("Input is relevant to database schema")
         else:
             _logger.info("Input is not related to the database. Halting the workflow")
-            error = "yes"
+            error = True
             messages += [('assistant', 'Your question is not related to the database and cannot be processed.')]
             
         # Update state
@@ -263,11 +253,11 @@ def get_workflow(conn, cursor, vector_store):
         sql_solution = state.get('generation', {})
         sql_query = sql_solution.sql_code
         messages = state['messages']
-        error = "no"
+        error = False
         
         if "SELECT" not in sql_query.upper():
             _logger.warning("Generated SQL query does not contain any SELECT query")
-            error = "yes"
+            error = True
             messages += [('assistant', f"The generated SQL query does not have SELECT operation")]
             
         else:
@@ -304,7 +294,7 @@ def get_workflow(conn, cursor, vector_store):
         # Extract relevant data from the state
         messages = state['messages']
         sql_solution = state['generation']
-        error = 'no'
+        error = False
         
         sql_code = sql_solution.sql_code.strip()
         try:
@@ -320,11 +310,13 @@ def get_workflow(conn, cursor, vector_store):
             conn.execute('ROLLBACK TO sql_check;')
             _logger.error("SQL query validation failed. Error: %s", e)
             messages += [('user', f'Your SQL query failed to execute: {e}')] # Feedback to LLM
-            error = "yes"
+            error = True
             
         # Update the state with the error status
         state['error'] = error
         state['messages'] = messages
+        
+        return state
     
     # Run Query
     # run_query node executes the validated SQL query, connecting to the database to retrieve results. It updates the state with the query output, ensuring the data is formatted for further analysis or reporting while implementing robust error handling.
@@ -360,7 +352,7 @@ def get_workflow(conn, cursor, vector_store):
     # Decision Step: Determine Next Action
     #The decide_next_step function acts as a control point in the workflow, deciding what action should be taken next based on the current state. It evaluates the error status and the number of iterations performed so far to determine if the query should be run, the workflow should be finished, or if the system should retry generating the SQL query.
     """
-    - If there is no error (error == "no"), the system proceeds with running the SQL query.
+    - If there is no error (error == False), the system proceeds with running the SQL query.
     - If the maximum number of iterations (max_iterations) has been reached, the workflow ends.
     - If an error occurred and the maximum iterations haven't been reached, the system will retry the query generation.
     """
@@ -379,7 +371,7 @@ def get_workflow(conn, cursor, vector_store):
         error = state['error']
         iterations = state['iterations']
         
-        if error == "no":
+        if error == False:
             _logger.info("Error status: no. Proceeding with running the query")
             return "run_query"
         elif iterations < max_iterations:
@@ -409,7 +401,7 @@ def get_workflow(conn, cursor, vector_store):
     # Define workflow conditional edge
     workflow.add_conditional_edges(
         "pre_safety_check",
-        lambda state: "schema_extract" if state['error'] == "no" else END,
+        lambda state: "schema_extract" if state['error'] == False else END,
         {"schema_extract" : "schema_extract", END : END}
     )
     workflow.add_edge("schema_extract", 'context_check')
@@ -417,7 +409,7 @@ def get_workflow(conn, cursor, vector_store):
     # Conditional edge after context check
     workflow.add_conditional_edges(
         'context_check',
-        lambda state: "generate" if state['error'] == "no" else END,
+        lambda state: "generate" if state['error'] == False else END,
         {"generate" : "generate", END : END}
     )
     
@@ -427,7 +419,7 @@ def get_workflow(conn, cursor, vector_store):
     # Conditional edge after post_safety check
     workflow.add_conditional_edges(
         "post_safety_check",
-        lambda state: 'sql_check' if state['error'] == "no" else END,
+        lambda state: 'sql_check' if state['error'] == False else END,
         {'sql_check' : "sql_check", END : END}
     )
     

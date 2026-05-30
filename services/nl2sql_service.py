@@ -76,7 +76,7 @@ class NL2SQLService:
             initial_state = {
                 "messages": [('user', question)],
                 'iterations': 0,
-                "error": "",
+                "error": False,
                 "results": None,
                 "generation": None,
                 "no_records_found": False,
@@ -107,7 +107,7 @@ class NL2SQLService:
         return {
             "sql": sql,
             "results": solution.get("results") or [],
-            "success": solution.get("error") != 'yes',
+            "success": solution.get("error") != True,
             "latency_ms": latency_ms
         }
     
