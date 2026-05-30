@@ -35,12 +35,12 @@ deploy/phase-2-data-assets
 
 **Bugs to fix (each = one commit):**
 
-- [ ] `sql_check()` does not return `state` — silent bug, graph loses all state changes from this node
-- [ ] `pre_safety_check` — `safety_prompt` uses `{translated_input}` as a plain string, not an f-string — the actual user input is never checked
-- [ ] `context_check` — verify `context_prompt` f-string interpolates correctly
-- [ ] `generate()` — confirm vector store key name matches what the prompt template expects
-- [ ] Parameterize `REMOTE_SERVER_URI` — move it to `.env` so it doesn't need to change in code per environment
-- [ ] Remove dead commented-out logging code in `workflow.py` (lines 15–21)
+- [X] `sql_check()` does not return `state` — silent bug, graph loses all state changes from this node
+- [X] `pre_safety_check` — `safety_prompt` uses `{translated_input}` as a plain string, not an f-string — the actual user input is never checked
+- [X] `context_check` — verify `context_prompt` f-string interpolates correctly
+- [X] `generate()` — confirm vector store key name matches what the prompt template expects
+- [X] Parameterize `REMOTE_SERVER_URI` — move it to `.env` so it doesn't need to change in code per environment - deferred to Phase 1
+- [X] Remove dead commented-out logging code in `workflow.py` (lines 15–21)
 
 **Git practice for this phase:**
 ```
