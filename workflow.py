@@ -10,16 +10,6 @@ from pydantic import Field
 
 # Initalize the logger
 _logger = logging.getLogger(__name__)
-# _logger.setLevel(logging.INFO)
-
-# if not _logger.handlers:
-#     handler = logging.StreamHandler()
-
-#     formatter = logging.Formatter(
-#         "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-#     handler.setFormatter(formatter)
-#     _logger.addHandler(handler)
-    
 
 
 class GraphState(TypedDict):
